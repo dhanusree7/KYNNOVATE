@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #6a0dad;
+        }
+
+        .login-container label {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .login-container input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        .login-container input[type="text"]:focus {
+            border: 1px solid #6a0dad;
+        }
+
+        .login-container input[type="submit"] {
+            background-color: #6a0dad;
+            color: #fff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-container input[type="submit"]:hover {
+            background-color: #5a08b3;
+        }
+
+        .login-container p {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .login-container p a {
+            text-decoration: none;
+            color: #6a0dad;
+            font-weight: bold;
+        }
+
+        .login-container p a:hover {
+            color: #5a08b3;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+    <script>
+        function validateLogin() {
+            var username = document.getElementById("username").value;
+            let userPoints = 0;
+
+            // Set points for each user on login
+            if (username === "Alice") {
+                userPoints = 30;
+            } else if (username === "Bob") {
+                userPoints = 60;
+            } else if (username === "Charlie") {
+                userPoints = 25;
+            }
+
+            // Save username and points in localStorage
+            localStorage.setItem("username", username);
+            localStorage.setItem("rewardPoints", userPoints);
+
+            // Redirect based on username
+            if (username === "Admin") {
+                window.location.href = "Admin.html";  // Redirect to Admin page
+            } else {
+                window.location.href = "user.html";  // Redirect to user page
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form onsubmit="event.preventDefault(); validateLogin();">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <input type="submit" value="Login">
+            <p>New user? <a href="#">Sign up</a></p>
+        </form>
+    </div>
+</body>
+</html>
