@@ -27,3 +27,5 @@ This project implements a reward system designed to track user engagement and in
 1. Clone the repository to your local machine:
    ```bash
    git clone https://github.com/your-username/your-repository-name.git
+2.use the login Admin to access the Admin page and Alice,Bob,Charlie for user page
+3.u can use like to increase the score and redeem it when it hits the limit.
