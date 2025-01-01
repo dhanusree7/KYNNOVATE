@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #6a0dad;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            border-radius: 8px;
+        }
+
+        .header .points {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header button {
+            padding: 8px 15px;
+            border: none;
+            background-color: #ff4500;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .user-list {
+            margin-top: 20px;
+        }
+
+        .user-info {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .user-info h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .user-info p {
+            margin: 5px 0;
+        }
+
+        .user-info .action {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .user-info button {
+            padding: 8px 15px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            display: none;
+        }
+
+        .leaderboard-table th, .leaderboard-table td {
+            padding: 10px 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .leaderboard-table th {
+            background-color: #6a0dad;
+            color: white;
+        }
+
+        .leaderboard-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .leaderboard-table tr:hover {
+            background-color: #ddd;
+        }
+
+        .leaderboard-button {
+            background-color: #17a2b8;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .leaderboard-button:hover {
+            background-color: #138496;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="points">
+            <button id="total-reward-points">Total Reward Points: 0</button>
+        </div>
+        <div class="profile">
+            <span>Admin</span>
+        </div>
+    </div>
+
+    <div class="user-list" id="user-list">
+        <!-- User data will load here dynamically -->
+    </div>
+
+    <button class="leaderboard-button" id="leaderboard-toggle">Show Leaderboard</button>
+
+    <table class="leaderboard-table" id="leaderboard-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Reward Points</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboard-body">
+            <!-- Leaderboard entries will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Simulated data for users
+        const users = [
+            { username: "Alice", likes: 10, comments: 5, rewardPoints: 30 },
+            { username: "Bob", likes: 15, comments: 3, rewardPoints: 60 },
+            { username: "Charlie", likes: 8, comments: 12, rewardPoints: 25 },
+        ];
+
+        const rewardPointsButton = document.getElementById("total-reward-points");
+        const userList = document.getElementById("user-list");
+        const leaderboardTable = document.getElementById("leaderboard-table");
+        const leaderboardBody = document.getElementById("leaderboard-body");
+
+        let totalRewardPoints = users.reduce((total, user) => total + user.rewardPoints, 0);
+
+        // Update total reward points
+        function updateTotalPoints() {
+            rewardPointsButton.textContent = `Total Reward Points: ${totalRewardPoints}`;
+        }
+
+        // Render users' information
+        users.forEach((user) => {
+            const userElement = document.createElement("div");
+            userElement.classList.add("user-info");
+            userElement.innerHTML = `
+                <h3>${user.username}</h3>
+                <p>Likes: ${user.likes}</p>
+                <p>Comments: ${user.comments}</p>
+                <p>Reward Points: ${user.rewardPoints}</p>
+                <div class="action">
+                    <button onclick="updateUserPoints('${user.username}')">Update Points</button>
+                    <button onclick="viewDetails('${user.username}')">View Details</button>
+                </div>
+            `;
+            userList.appendChild(userElement);
+        });
+
+        // Update user points function
+        function updateUserPoints(username) {
+            const user = users.find(user => user.username === username);
+            const newPoints = prompt(`Update points for ${username}:`, user.rewardPoints);
+            if (newPoints !== null && !isNaN(newPoints)) {
+                user.rewardPoints = parseInt(newPoints);
+                totalRewardPoints = users.reduce((total, user) => total + user.rewardPoints, 0);
+                updateTotalPoints();
+                alert(`${username}'s points updated to ${newPoints}`);
+                renderLeaderboard(); // Refresh leaderboard
+            } else {
+                alert("Invalid points entered.");
+            }
+        }
+
+        // Function to handle viewing details (could expand with more info)
+        function viewDetails(username) {
+            const user = users.find(user => user.username === username);
+            alert(`Details for ${username}: \nLikes: ${user.likes} \nComments: ${user.comments}`);
+        }
+
+        // Render the leaderboard
+        function renderLeaderboard() {
+            leaderboardBody.innerHTML = ""; // Clear previous leaderboard entries
+            const sortedUsers = [...users].sort((a, b) => b.rewardPoints - a.rewardPoints);
+            sortedUsers.forEach((user, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${user.username}</td>
+                    <td>${user.rewardPoints}</td>
+                    <td><button onclick="updateUserPoints('${user.username}')">Update</button></td>
+                `;
+                leaderboardBody.appendChild(row);
+            });
+        }
+
+        // Show leaderboard on button click
+        document.getElementById("leaderboard-toggle").addEventListener("click", () => {
+            const isVisible = leaderboardTable.style.display === "table";
+            leaderboardTable.style.display = isVisible ? "none" : "table";
+            if (!isVisible) {
+                renderLeaderboard();
+            }
+        });
+
+        // Initial call to update total reward points on page load
+        updateTotalPoints();
+    </script>
+</body>
+</html>
